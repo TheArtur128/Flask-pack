@@ -3,6 +3,8 @@ from typing import Final, Iterable, Callable
 from pyannotating import Special
 from pyhandling.collections_ import MultiRange
 
+from flask import Response, Config
+
 
 class StatusCodeGroup:
     """
@@ -36,3 +38,15 @@ def status_code_from(response: Special[Response | Iterable]) -> int:
         return response[1]
     else:
         return 200
+
+
+def config_from(
+    file_name: str,
+    config_parse_method: Callable[[Config, str], None] = Config.from_object
+) -> Config:
+    """Function for creating a config, delegating the update method to it."""
+
+    config = Config(str())
+    config_parse_method(config, file_name)
+
+    return config
